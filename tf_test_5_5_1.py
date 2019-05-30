@@ -37,3 +37,9 @@ with tf.variable_scope('foo'):
         print(v3.name)
     v4 = tf.get_variable('v1', [1])
     print(v4.name)
+
+with tf.variable_scope("", reuse=True):
+    v5 = tf.get_variable('foo/bar/v', [1])
+    print(v5 == v3)
+    v6 = tf.get_variable('foo/v1', [1])
+    print(v6 == v4)

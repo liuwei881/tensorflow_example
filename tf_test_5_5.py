@@ -32,19 +32,28 @@ TRAINING_STEPS = 30000
 MOVING_AVERAGE_DECAY = 0.99
 
 
-def inference(input_tensor, avg_class, weights1, biases1, weights2, biases2):
+# def inference(input_tensor, avg_class, weights1, biases1, weights2, biases2):
+#     """
+#     模型层计算
+#     """
+#     if not avg_class:
+#         layer1 = tf.nn.relu(tf.matmul(input_tensor, weights1) + biases1)
+#         return tf.matmul(layer1, weights2) + biases2
+#     else:
+#         layer1 = tf.nn.relu(
+#             tf.matmul(input_tensor, avg_class.average(weights1)) + 
+#             avg_class.average(biases1))
+#         return tf.matmul(
+#             layer1, avg_class.average(weights2)) + avg_class.average(biases2)
+
+
+def inference(input_tensor, reuse=False):
     """
-    模型层计算
+    使用variable_scope重写inference
     """
-    if not avg_class:
-        layer1 = tf.nn.relu(tf.matmul(input_tensor, weights1) + biases1)
-        return tf.matmul(layer1, weights2) + biases2
-    else:
-        layer1 = tf.nn.relu(
-            tf.matmul(input_tensor, avg_class.average(weights1)) + 
-            avg_class.average(biases1))
-        return tf.matmul(
-            layer1, avg_class.average(weights2)) + avg_class.average(biases2)
+    # 定义第一层神经网络的变量和前向传播过程
+    with tf.variable_scope('layer1', reuse=reuse):
+        
 
 
 def train(mnist):
